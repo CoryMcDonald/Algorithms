@@ -34,7 +34,7 @@ class AlgoAsgn6 {
 				{
 					edges.add(new Edge(Integer.parseInt(split[0]),Integer.parseInt(split[1]),Integer.parseInt(split[2])));
 				}
-			}else
+			}else if (index != 1)
 			{
 				System.out.println("Case #" + cases +": " + dijkstra(vertices, edges, startVertex,endVertex));	
 				cases ++;
@@ -57,7 +57,7 @@ class AlgoAsgn6 {
 		p.priority = 0;
 		visited.add(p);
 		queue.add(p);
-
+		
 
 		while(queue.size() > 0) 
 		{
@@ -65,7 +65,6 @@ class AlgoAsgn6 {
 			if(u.vertex == endVertex)
 			{
 				returnValue = Integer.toString(u.priority);
-
 				break;
 			}
 			ArrayList<Edge> adj = new ArrayList<Edge>();
@@ -95,7 +94,6 @@ class AlgoAsgn6 {
 						queue.add(next);
 						visited.add(next);
 						used.put(nextVertex, next);
-
 					}
 				}else
 				{
@@ -105,9 +103,6 @@ class AlgoAsgn6 {
 				}
 			}
 		}
-		//Laziness ensues
-		if(returnValue.equals( "0"))
-			returnValue = "unreachable";
 		return returnValue;
 	}
 }
@@ -154,7 +149,7 @@ class Point implements Comparable<Point>
 	}
 
 	public String toString() {
-		return "("+ vertex + ") - " + priority;
+		return "("+ vertex + ")";
 	}
 }
 class Edge
