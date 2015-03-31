@@ -13,7 +13,7 @@ class AlgoAsgn6 {
 		int startVertex = 0;
 		int endVertex = 0;
 		Scanner scanner = new Scanner(System.in);
-		while (scanner.hasNext())
+		while (scanner.hasNext())		
 		{
 			String input = scanner.nextLine();
 
@@ -95,7 +95,6 @@ class AlgoAsgn6 {
 						queue.add(next);
 						visited.add(next);
 						used.put(nextVertex, next);
-
 					}
 				}else
 				{
