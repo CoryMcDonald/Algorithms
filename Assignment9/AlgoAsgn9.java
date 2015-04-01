@@ -4,68 +4,85 @@ import java.util.Stack;
 
 public class AlgoAsgn9
 {
-    private static int numberOfNodes;
-
-    public static int tsp(int adjacencyMatrix[][])
-    {
-        Stack<Integer> stack = new Stack<Integer>();
-        int returnValue = 0;
-        numberOfNodes = adjacencyMatrix[1].length - 1;
-        int[] visited = new int[numberOfNodes + 1];
-        visited[1] = 1;
-        stack.push(1);
-        int element, dst = 0, i;
-        int min = Integer.MAX_VALUE;
-        boolean minFlag = false;
-
-        while (!stack.isEmpty())
-        {
-            element = stack.peek();
-            i = 1;
-            min = Integer.MAX_VALUE;
-            while (i <= numberOfNodes)
-            {
-                if (adjacencyMatrix[element][i] > 1 && visited[i] == 0)
-                {
-                    if (min > adjacencyMatrix[element][i])
-                    {
-                        min = adjacencyMatrix[element][i];
-                        dst = i;
-                        minFlag = true;
-                    }
-                }
-                i++;
-            }
-            if (minFlag)
-            {
-                //Adding twice because we will have to return back to the beginning
-                visited[dst] = 1;
-                returnValue += min;
-                stack.push(dst);
-                // System.out.print(dst + "\t");
-                minFlag = false;
-                continue;
-            }
-            stack.pop();
-        }
-        return returnValue+adjacencyMatrix[dst][1];
-    }
+    
 
     public static void main(String... arg)
     {
-        int number_of_nodes;
-        Scanner scanner = null;
+        Scanner scanner = new Scanner(System.in);
+        int count =0;
+        int temp=1;
+        int adjacency_matrix[][] = new int[1][1];
+
+        // while (scanner.hasNext())   
+        // {
+        //     String input = scanner.nextLine();
+        //     if(count > 0 && !input.equals(""))
+        //     {
+        //         String[] split = input.split(" ");
+        //         if(split.length == 1)
+        //         {
+        //             int newSize =  Integer.parseInt(split[0])+1;
+        //             adjacency_matrix = new int[newSize][newSize];
+        //             temp = 1;
+        //         }else if(split.length > 1)
+        //         {
+        //             for(int j=1; j<=split.length; j++)
+        //             {
+        //                 adjacency_matrix[temp][j] = Integer.parseInt(split[j-1]);
+        //             }
+        //             temp++;
+        //         }
+        //     }
+        //     if(count != 1 && (input.equals("") || !scanner.hasNext()))
+        //     {
+        //         for (int i = 1; i <= adjacency_matrix[0].length-1; i++)
+        //         {
+        //             for (int j = 1; j <= adjacency_matrix[0].length-1; j++)
+        //             {
+        //                 if (adjacency_matrix[i][j] == 1 && adjacency_matrix[j][i] == 0)
+        //                 {
+        //                     adjacency_matrix[j][i] = 1;
+        //                 }
+        //             }
+        //         }
+        //         System.out.println(fdsa(adjacency_matrix));
+        //     }
+        //     count++;
+        // }
+        // System.out.println(scanner.hasNext());
+        // for (int i = 1; i <= adjacency_matrix[0].length-1; i++)
+        // {
+        //     for (int j = 1; j <= adjacency_matrix[0].length-1; j++)
+        //     {
+        //         System.out.print(adjacency_matrix[i][j] + " ");
+        //     }
+        //     System.out.print("\n");
+        // }
+
+        // for (int i = 1; i <= 4; i++)
+        // {
+        //     for (int j = 1; j <= 4; j++)
+        //     {
+        //         if (adjacency_matrix[i][j] == 1 && adjacency_matrix[j][i] == 0)
+        //         {
+        //             adjacency_matrix[j][i] = 1;
+
+        //         }
+        //     }
+        // }
         
-        scanner = new Scanner(System.in);
-        number_of_nodes = scanner.nextInt();
-        int adjacency_matrix[][] = new int[number_of_nodes + 1][number_of_nodes + 1];
+        int number_of_nodes = scanner.nextInt();
+        adjacency_matrix = new int[number_of_nodes+ 1][number_of_nodes+1];
         for (int i = 1; i <= number_of_nodes; i++)
         {
             for (int j = 1; j <= number_of_nodes; j++)
             {
                 adjacency_matrix[i][j] = scanner.nextInt();
             }
+            // System.out.println("");
         }
+
+        //do some stuff
         for (int i = 1; i <= number_of_nodes; i++)
         {
             for (int j = 1; j <= number_of_nodes; j++)
@@ -76,7 +93,17 @@ public class AlgoAsgn9
                 }
             }
         }
-        System.out.println("\n" + tsp(adjacency_matrix));
+        for (int i = 1; i <= adjacency_matrix[0].length-1; i++)
+        {
+            for (int j = 1; j <= adjacency_matrix[0].length-1; j++)
+            {
+                System.out.print(adjacency_matrix[i][j] + " ");
+            }
+            System.out.print("\n");
+        }
+                System.out.println(tsp(adjacency_matrix));
+                // System.out.println(fdsa(adjacency_matrix));
+
         scanner.close();
     }
 }
