@@ -30,11 +30,12 @@ class AlgoAsgn9
             System.out.print(p + " ");
         System.out.print("\n");
 
-        if(u.parents.size() > 1 )
-            System.out.println(u.parents.get(u.parents.size()-1));
+        // if(u.parents.size() > 1 )
+        //     System.out.println(u.parents.get(u.parents.size()-1));
         // System.out.println("2,2: " + adjacency_matrix[1][4]);
         for(int i=0; i<adjacency_matrix[0].length; i++) //each row
         {
+            boolean addFlag = true;
             //Need to consider that the parents prior to 
             if(!u.parents.contains(i+1) || (u.parents.size() >= 1 && i+1 == u.parents.get(u.parents.size()-1)))
             {
@@ -44,25 +45,29 @@ class AlgoAsgn9
                 {    
                     //we can't consider any of the parents where row = last parent
                     //otherwise we can't consider any of the parents except for 1
-                    if(adjacency_matrix[i][j] != 0)
-                        if(u.parents.size() >= 1 && i+1 == u.parents.get(u.parents.size()-1) && !u.parents.contains(j+1))
-                            System.out.print(adjacency_matrix[i][j] +" ");
-                   
-                    //Grabbing the min value for row
+                    
                     if (adjacency_matrix[i][j] < minForRow && adjacency_matrix[i][j] != 0)
                     {
-                        minForRow = adjacency_matrix[i][j];                         
+                        if(u.parents.size() >= 1 && i+1 == u.parents.get(u.parents.size()-1) && !u.parents.contains(j+1))
+                        {
+                            minForRow = adjacency_matrix[i][j];                         
+                            // System.out.print(adjacency_matrix[i][j] +" ");
+                        }
+                        else if((!u.parents.contains(j+1) || j==0) && (i+1 != u.parents.get(u.parents.size()-1)))
+                        {
+                            minForRow = adjacency_matrix[i][j];                         
+                            // System.out.print(adjacency_matrix[i][j] +", ");
+                        }
                     }
                 }
                 if(minForRow != Integer.MAX_VALUE)
                 {
                     bound += minForRow;
-                    System.out.print(" = min: " + minForRow);
+                    // System.out.print(" = min: " + minForRow + "\n");
                 }
-                System.out.print("\n");
             }
         }
-        System.out.print("= " + bound + "\n");
+        System.out.println("Bound: " + bound);
         return bound;
     }
     static void Travel(int adjacency_matrix[][])
