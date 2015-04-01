@@ -8,16 +8,15 @@ class AlgoAsgn9
         int prevVertex = -1;
         for(int p : u.parents)
         {
-            System.out.print(p + ", ");
-            if(prevVertex != -1)
+            // System.out.print(p + ", ");
+            if(p-1 > 0 )
             {
-                length += adjacency_matrix[prevVertex][p+1];
-                System.out.println("\t" + adjacency_matrix[prevVertex][p+1]);
+                length += adjacency_matrix[prevVertex-1][p-1];
+                // System.out.println("\t" + adjacency_matrix[prevVertex-1][p-1]);
             }
             prevVertex = p;
         }
-        System.out.println("Length: " + length);
-        System.out.print("\n");
+        // System.out.print("\n");
         return length;
         // return u.parents.size();
     }
@@ -26,14 +25,30 @@ class AlgoAsgn9
         //so we need to go through column row that isn't in parents
         //so
         int bound = length(u, adjacency_matrix);
+        System.out.print("Length: " + bound + "; Parents: ");
+        for(int p : u.parents)
+            System.out.print(p + " ");
+        System.out.print("\n");
+
+        if(u.parents.size() > 1 )
+            System.out.println(u.parents.get(u.parents.size()-1));
         // System.out.println("2,2: " + adjacency_matrix[1][4]);
         for(int i=0; i<adjacency_matrix[0].length; i++) //each row
         {
-            if(!u.parents.contains(i) || (u.parents.size() >= 1 && i == u.parents.get(u.parents.size()-1)))
+            //Need to consider that the parents prior to 
+            if(!u.parents.contains(i+1) || (u.parents.size() >= 1 && i+1 == u.parents.get(u.parents.size()-1)))
             {
                 int minForRow = Integer.MAX_VALUE;
+
                 for(int j=0; j<adjacency_matrix[0].length; j++) //each column
-                {
+                {    
+                    //we can't consider any of the parents where row = last parent
+                    //otherwise we can't consider any of the parents except for 1
+                    if(adjacency_matrix[i][j] != 0)
+                        if(u.parents.size() >= 1 && i+1 == u.parents.get(u.parents.size()-1) && !u.parents.contains(j+1))
+                            System.out.print(adjacency_matrix[i][j] +" ");
+                   
+                    //Grabbing the min value for row
                     if (adjacency_matrix[i][j] < minForRow && adjacency_matrix[i][j] != 0)
                     {
                         minForRow = adjacency_matrix[i][j];                         
@@ -42,10 +57,12 @@ class AlgoAsgn9
                 if(minForRow != Integer.MAX_VALUE)
                 {
                     bound += minForRow;
-
+                    System.out.print(" = min: " + minForRow);
                 }
+                System.out.print("\n");
             }
         }
+        System.out.print("= " + bound + "\n");
         return bound;
     }
     static void Travel(int adjacency_matrix[][])
@@ -65,7 +82,7 @@ class AlgoAsgn9
             Point current = queue.remove();
             if(current.bound < minlength)
             {
-                for ( int i =2; i < n && !current.parents.contains(i); i++)
+                for ( int i =2; i <= n && !current.parents.contains(i); i++)
                 {
                     Point u = new Point(current.parents);
                     u.level = current.level +1;
@@ -111,30 +128,30 @@ class AlgoAsgn9
                 String[] split = input.split(" ");
                 if(split.length == 1)
                 {
-                    int newSize =  Integer.parseInt(split[0])+1;
+                    int newSize =  Integer.parseInt(split[0]);
                     adjacency_matrix = new int[newSize][newSize];
-                    temp = 1;
+                    temp = 0;
                 }else if(split.length > 1)
                 {
-                    for(int j=1; j<=split.length; j++)
+                    for(int j=0; j < split.length; j++)
                     {
-                        adjacency_matrix[temp][j] = Integer.parseInt(split[j-1]);
+                        adjacency_matrix[temp][j] = Integer.parseInt(split[j]);
                     }
                     temp++;
                 }
             }
             if(count != 1 && (input.equals("") || !scanner.hasNext()))
             {
-                for (int i = 1; i <= adjacency_matrix[0].length-1; i++)
-                {
-                    for (int j = 1; j <= adjacency_matrix[0].length-1; j++)
-                    {
-                        if (adjacency_matrix[i][j] == 1 && adjacency_matrix[j][i] == 0)
-                        {
-                            adjacency_matrix[j][i] = 1;
-                        }
-                    }
-                }
+                // for (int i = 0; i <= adjacency_matrix[0].length-1; i++)
+                // {
+                //     for (int j = 0; j <= adjacency_matrix[0].length-1; j++)
+                //     {
+                //         if (adjacency_matrix[i][j] == 1 && adjacency_matrix[j][i] == 0)
+                //         {
+                //             adjacency_matrix[j][i] = 1;
+                //         }
+                //     }
+                // }
                 Travel(adjacency_matrix);
             }
             count++;
