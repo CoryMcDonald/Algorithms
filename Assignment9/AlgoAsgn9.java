@@ -8,15 +8,19 @@ class AlgoAsgn9
         int prevVertex = -1;
         for(int p : u.parents)
         {
-            // System.out.print(p + ", ");
-            if(p-1 > 0 )
+            if(prevVertex != -1)
             {
+                // System.out.print(length + "+"+ adjacency_matrix[prevVertex-1][p-1] + " = ");
                 length += adjacency_matrix[prevVertex-1][p-1];
-                // System.out.println("\t" + adjacency_matrix[prevVertex-1][p-1]);
+                // System.out.print(length);
+                // System.out.print("\t" + p + ":" + adjacency_matrix[prevVertex-1][p-1]);
+            }else if(prevVertex == -1)
+            {
+                // System.out.print(p + " ");
             }
             prevVertex = p;
         }
-        // System.out.print("\n");
+        // System.out.print("= " + length + "\n ");
         return length;
         // return u.parents.size();
     }
@@ -25,10 +29,9 @@ class AlgoAsgn9
         //so we need to go through column row that isn't in parents
         //so
         int bound = length(u, adjacency_matrix);
-        System.out.print("Length: " + bound + "; Parents: ");
-        for(int p : u.parents)
-            System.out.print(p + " ");
-        System.out.print("\n");
+        // System.out.print("Length: " + bound + "; Parents: ");
+        // for(int p : u.parents)
+        //     System.out.print(p + " ");
 
         // if(u.parents.size() > 1 )
         //     System.out.println(u.parents.get(u.parents.size()-1));
@@ -67,7 +70,7 @@ class AlgoAsgn9
                 }
             }
         }
-        System.out.println("Bound: " + bound);
+        // System.out.println("Bound: " + bound);
         return bound;
     }
     static void Travel(int adjacency_matrix[][])
@@ -75,6 +78,7 @@ class AlgoAsgn9
         int n = adjacency_matrix[0].length; //the count of how many elements are in the matrix
         PriorityQueue<Point> queue = new PriorityQueue<Point>();
         ArrayList<Integer> opttour = new ArrayList<Integer>();
+        Point minPoint = null;
         int minlength = Integer.MAX_VALUE;
         Point v = new Point();
         v.level = 0;
@@ -87,35 +91,57 @@ class AlgoAsgn9
             Point current = queue.remove();
             if(current.bound < minlength)
             {
-                for ( int i =2; i <= n && !current.parents.contains(i); i++)
+                for ( int i =2; i <= n ; i++)
                 {
-                    Point u = new Point(current.parents);
-                    u.level = current.level +1;
-                    u.parents.add(i);
-                    u.bound = v.bound;
-                    if(u.level == n-2)
+                    if(!current.parents.contains(i))
                     {
-                        //put inde of only vertex remaing at the end of u.parents
-                        //put 1 at the end of u.path
-                        if(length(u, adjacency_matrix) < minlength)
+                        // System.out.println("i: " + i);
+                        Point u = new Point(current.parents);
+                        u.level = current.level +1;
+                        u.parents.add(i);
+                        u.bound = v.bound;
+                        // for(int p : u.parents)
+                        //     System.out.print(p + " ");
+                        // System.out.print("\n");
+                        if(u.level == n-2)
                         {
-                            System.out.println("circuit found");
-                            minlength = length(u, adjacency_matrix);
-                            opttour = u.parents;
-                        }
-                    }else
-                    {
-                        u.bound = bound(u, adjacency_matrix);
-                        if(u.bound < minlength)
+                            //put inde of only vertex remaing at the end of u.parents
+                            for(int temp = 1; temp <= n; temp++)
+                            {
+                                if(!u.parents.contains(temp))
+                                    u.parents.add(temp);
+                            }
+                            u.parents.add(1);
+                            if(length(u, adjacency_matrix) < minlength)
+                            {
+                                minlength = length(u, adjacency_matrix);
+                                minPoint = u;
+                                opttour = u.parents;
+                                // System.out.println("\tcircuit found: " + minlength);
+                            }
+                        }else
                         {
-                            System.out.println("New bound = " + u.bound);
-                            // queue.add(u);
+                            u.bound = bound(u, adjacency_matrix);
+                            if(u.bound < minlength)
+                            {
+                                // System.out.println("\tAdding to queue, bound = " + u.bound);
+                                queue.add(u);
+                            }else 
+                            {
+                                // System.out.println("\tNot adding : " + i + " becaues bound = " + u.bound);
+                            }
                         }
                     }
                 }
-                // for(int i =0; )
+            }else
+            {
+                // System.out.println("Bound > min: " + current.bound);
             }
         }
+        if(minPoint !=null)
+        System.out.println(length(minPoint, adjacency_matrix));
+        // int length = adjacency_matrix[opttour.get(opttour.size())][1];
+        // System.out.print("1" + length(opttour, adjacency_matrix) + "\n");
     }
 
     public static void main(String... arg)
